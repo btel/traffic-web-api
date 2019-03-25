@@ -1,0 +1,38 @@
+swagger: '2.0'
+info:
+  description: This is the swagger file that goes with our server code
+  version: 1.0.0
+  title: Swagger Rest Article
+consumes:
+  - application/json
+produces:
+  - application/json
+basePath: /api
+paths:
+  /traffic:
+    get:
+      operationId: traffic.read_last
+      tags:
+        - traffic
+      summary: Read traffic information
+      description: Traffic in the last 24 hours
+      parameters:
+        - name: period
+          description: "period in hours to get traffic from"
+          in: query
+          type: integer
+          required: false
+      responses:
+        200:
+          description: "Time series of traffic"
+          schema:
+            type: array
+            items:
+              properties:
+                date:
+                  type: string
+                debit:
+                  description : "number of cars per hour"
+                  type: integer
+                percent:
+                  type: number
