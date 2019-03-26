@@ -11,7 +11,7 @@ basePath: /api
 paths:
   /traffic:
     get:
-      operationId: traffic.read_last
+      operationId: traffic_back.traffic.read_last
       tags:
         - traffic
       summary: Read traffic information
