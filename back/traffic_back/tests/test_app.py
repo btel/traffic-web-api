@@ -3,11 +3,29 @@
 
 import pytest
 import json
+import os
 from traffic_back import create_app
+from traffic_back.db import init_db, get_db
+import psycopg2 as pg
+
+sql_file = os.path.join(os.path.dirname(__file__), 'data.sql')
+with open(sql_file, 'rb') as f:
+    _data_sql = f.read().decode('utf8')
+
+DB_USER = os.environ.get("DBUSER")
 
 @pytest.fixture
 def app():
-    app = create_app()
+    app = create_app({'DATABASE' : 'traffictestdb',
+                      'DBUSER': DB_USER,
+                      'TESTING': True})
+
+    with app.app_context():
+        init_db()
+        db = get_db()
+        with db.cursor() as cursor:
+            cursor.execute(_data_sql)
+
     yield app
 
 @pytest.fixture
@@ -25,3 +43,9 @@ def test_traffic(client):
     assert response.status_code == 200
     data = json.loads(response.data)
     assert len(data['data']) == 12
+
+    response = client.get('/api/traffic?period=2')
+    assert response.status_code == 200
+    data = json.loads(response.data)
+    assert data['data'][0]['timestamp'] == '2018-08-10T12:00:00'
+    assert data['data'][1]['timestamp'] == '2018-08-10T12:00:00'

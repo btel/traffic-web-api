@@ -14,5 +14,5 @@ def read_last(period=24):
 
     data = []
     for date, dd, pp in zip(dates, debit, percent):
-        data.append(dict(date=date, debit=dd, percent=pp))
+        data.append(dict(timestamp=date, debit=dd, percent=pp))
     return {'data' : data}

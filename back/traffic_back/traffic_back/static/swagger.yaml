@@ -29,7 +29,7 @@ paths:
             type: array
             items:
               properties:
-                date:
+                timestamp:
                   type: string
                 debit:
                   description : "number of cars per hour"
