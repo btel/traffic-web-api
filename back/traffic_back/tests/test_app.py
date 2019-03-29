@@ -47,5 +47,5 @@ def test_traffic(client):
     response = client.get('/api/traffic?period=2')
     assert response.status_code == 200
     data = json.loads(response.data)
-    assert data['data'][0]['timestamp'] == '2018-08-10T12:00:00'
-    assert data['data'][1]['timestamp'] == '2018-08-10T12:00:00'
+    assert data['data'][0]['timestamp'] == '2018-08-11T13:00:00'
+    assert data['data'][1]['timestamp'] == '2018-08-11T12:00:00'

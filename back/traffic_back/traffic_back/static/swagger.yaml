@@ -26,13 +26,16 @@ paths:
         200:
           description: "Time series of traffic"
           schema:
-            type: array
-            items:
-              properties:
-                timestamp:
-                  type: string
-                debit:
-                  description : "number of cars per hour"
-                  type: integer
-                percent:
-                  type: number
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  properties:
+                    timestamp:
+                      type: string
+                    debit:
+                      description : "number of cars per hour"
+                      type: integer
+                    percent:
+                      type: number

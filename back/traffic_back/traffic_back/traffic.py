@@ -3,16 +3,15 @@
 
 import numpy as np
 import datetime
+from traffic_back.db import get_db
 
 
 def read_last(period=24):
-    now = datetime.datetime.utcnow()
-    hour = datetime.timedelta(hours=1)
-    dates = [now - i * hour for i in range(period)]
-    debit = np.random.randint(0, 100, size=100).tolist()
-    percent = (np.random.rand(100) * 100).tolist()
-
-    data = []
-    for date, dd, pp in zip(dates, debit, percent):
-        data.append(dict(timestamp=date, debit=dd, percent=pp))
-    return {'data' : data}
+    db = get_db()
+    fields = ('timestamp', 'debit', 'percent')
+    with db.cursor() as cursor:
+        cursor.execute("SELECT timestamp, debit, percent FROM traffic ORDER BY timestamp DESC LIMIT %s;", (period,))
+        data = cursor.fetchall()
+        data_dict = [dict(zip(fields, row)) for row in data] 
+        print(data)
+    return {'data' : data_dict}
