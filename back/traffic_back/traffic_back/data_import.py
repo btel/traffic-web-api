@@ -8,6 +8,7 @@ from . import db
 from flask.cli import with_appcontext
 import psycopg2 as pg
 import logging
+from dateutil import parser
 
 @click.command("import-traffic")
 @click.argument('csv_files', nargs=-1)
@@ -26,8 +27,9 @@ def import_traffic_command(csv_files):
         conn.autocommit = True
         with conn.cursor() as cursor:
             for row in df.itertuples():
+                date = parser.parse(row.date)
                 try:
-                    cursor.execute("INSERT INTO traffic (timestamp, debit, percent) VALUES (%s, %s, %s)", (row.date, row.debit, row.percent))
+                    cursor.execute("INSERT INTO traffic (timestamp, debit, percent) VALUES (%s, %s, %s)", (date.isoformat(), row.debit, row.percent))
                 except pg.DataError:
                     logging.warn('skipping row %s due to import error', row)
 

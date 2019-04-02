@@ -12,12 +12,11 @@ sql_file = os.path.join(os.path.dirname(__file__), 'data.sql')
 with open(sql_file, 'rb') as f:
     _data_sql = f.read().decode('utf8')
 
-DB_USER = os.environ.get("DBUSER")
+DB_USER = os.environ.get("USER")
 
 @pytest.fixture
 def app():
-    app = create_app({'DATABASE' : 'traffictestdb',
-                      'DBUSER': DB_USER,
+    app = create_app({'DATABASE_URL' : 'postgresql://{}@localhost/traffictestdb'.format(DB_USER),
                       'TESTING': True})
 
     with app.app_context():
